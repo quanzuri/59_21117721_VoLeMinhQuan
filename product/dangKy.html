@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registration Modal</title>
+    <link rel="stylesheet" href="../css/bootstrap.min.css" />
+    <link rel="stylesheet" href="../css/styles.css" />
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f7f9fc;
+            margin: 0;
+            padding: 0;
+        }
+
+        .form-container {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            padding: 20px;
+            margin: 50px auto;
+            max-width: 500px;
+        }
+
+        .form-container h2 {
+            text-align: center;
+            color: #007bff;
+        }
+
+        .form-group label {
+            font-weight: bold;
+        }
+
+        .btn-container {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .btn-primary {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        .btn-secondary {
+            background-color: #6c757d;
+            color: white;
+            border: none;
+            padding: 10px;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        footer {
+            text-align: center;
+            padding: 10px;
+            background-color: #f1f1f1;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <div class="form-container">
+        <h2>Tạo Tài Khoản</h2>
+        <form id="registration-form">
+            <div class="form-group">
+                <label for="email">Email:</label>
+                <input type="email" id="email" class="form-control" placeholder="Nhập email..." required>
+            </div>
+            <div class="form-group">
+                <label for="password">Mật khẩu:</label>
+                <input type="password" id="password" class="form-control" placeholder="Nhập mật khẩu..." required>
+            </div>
+            <div class="form-group">
+                <label for="full-name">Họ & Tên:</label>
+                <input type="text" id="full-name" class="form-control" placeholder="Nhập họ & tên..." required>
+            </div>
+            <div class="form-group">
+                <label for="phone">Số điện thoại:</label>
+                <input type="tel" id="phone" class="form-control" placeholder="Nhập số điện thoại..." required>
+            </div>
+            <div class="form-group">
+                <label for="captcha">Mã Captcha:</label>
+                <input type="text" id="captcha" class="form-control" placeholder="Nhập mã Captcha..." required>
+                <small>Mã Captcha: <strong>01ca</strong></small>
+            </div>
+            <div class="btn-container">
+                <button type="submit" class="btn btn-primary">Đăng Ký</button>
+                <button type="reset" class="btn btn-secondary">Làm Lại</button>
+            </div>
+        </form>
+    </div>
+    <footer>
+        <p>&copy; 2024 Chuỗi Nhà Thuốc Việt</p>
+    </footer>
+
+    <script>
+        document.getElementById("registration-form").addEventListener("submit", function(event) {
+            event.preventDefault(); // Ngăn form gửi đi
+
+            // Lấy dữ liệu từ form
+            const email = document.getElementById("email").value.trim();
+            const password = document.getElementById("password").value;
+            const fullName = document.getElementById("full-name").value.trim();
+            const phone = document.getElementById("phone").value.trim();
+            const captcha = document.getElementById("captcha").value.trim();
+            const correctCaptcha = "01ca";
+
+            // Kiểm tra dữ liệu nhập vào
+            if (!validateEmail(email)) {
+                alert("Email không hợp lệ!");
+                return;
+            }
+            if (password.length < 6) {
+                alert("Mật khẩu phải có ít nhất 6 ký tự!");
+                return;
+            }
+            if (!validatePhone(phone)) {
+                alert("Số điện thoại không hợp lệ!");
+                return;
+            }
+            if (captcha !== correctCaptcha) {
+                alert("Mã Captcha không đúng!");
+                return;
+            }
+
+            // Lưu dữ liệu vào localStorage
+            const userData = { email, password, fullName, phone };
+            let users = JSON.parse(localStorage.getItem("users")) || [];
+            users.push(userData);
+            localStorage.setItem("users", JSON.stringify(users));
+
+            // Thông báo thành công
+            alert("Đăng ký thành công!");
+            document.getElementById("registration-form").reset();
+        });
+
+        function validateEmail(email) {
+            const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return regex.test(email);
+        }
+
+        function validatePhone(phone) {
+            const regex = /^\d{10}$/;
+            return regex.test(phone);
+        }
+    </script>
+</body>
+</html>
